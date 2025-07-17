@@ -1,23 +1,15 @@
-const express = require("express");
-const {
-  salam,
-  signup,
-  signin,
-  signout,
-} = require("../controllers/userController");
-const { userSignUpValidator } = require("../middlewares/userValidator");
-
-const { requireSignin } = require("../middlewares/auth");
-
+const express= require("express");
+const { getOneUser } = require("../controllers/userController");
+const {userById} = require("../middlewares/user");
 const router = express.Router();
 
-router.get("/", salam);
 
-router.post("/signup", userSignUpValidator, signup);
-router.post("/signin", signin);
-router.get("/signout", signout);
-router.get("/hello", requireSignin, (req, res) => {
-  res.send({ message: "Hello there" });
-});
+router.get('/profile/:userId',getOneUser)
 
-module.exports = router;
+router.param('userId',userById);
+
+
+
+
+
+module.exports=router;
