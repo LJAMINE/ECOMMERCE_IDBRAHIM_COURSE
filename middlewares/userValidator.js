@@ -16,8 +16,8 @@ exports.userSignUpValidator = [
     body('password')
         .notEmpty()
         .withMessage('Password is required')
-        .isLength({ min: 6, max: 20 })
-        .withMessage('Password must be between 6 and 20 characters'),
+        .isLength({ min: 3, max: 8 })
+        .withMessage('Password must be between 3 and 8 characters'),
     
     (req, res, next) => {
         const errors = validationResult(req);
