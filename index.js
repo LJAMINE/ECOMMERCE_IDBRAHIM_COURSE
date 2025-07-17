@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 // import routes 
 const userRoutes=require("./routes/users")
 // config app
@@ -20,9 +21,9 @@ mongoose
     console.error("Database connection error:", err);
   });
 
-
 //   routes middleware 
 app.use('/api/users', userRoutes);
+
 
 
 

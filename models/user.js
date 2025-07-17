@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
-const uuid = require("uuid/v1");
+const uuid = require("uuid").v1;
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       trim: true,
-      minlength: 50,
+      maxlength: 50,
       required: true,
     },
     email: {
       type: String,
       trim: true,
-      minlength: 50,
+      maxlength: 50,
       unique: true,
       required: true,
     },
@@ -49,6 +49,7 @@ userSchema.virtual("password")
 })
 .get(function (){
     return this._password;
+
 });
 
 
@@ -57,7 +58,7 @@ userSchema.methods = {
     if (!password) return "";
     try {
         return crypto
-        .createHash('sha1',this.salt)
+        .createHmac('sha1',this.salt)
         .update(password)
         .digest('hex');
     } catch (error) {
@@ -65,3 +66,7 @@ userSchema.methods = {
     }
   },
 };
+
+
+
+module.exports=mongoose.model("User", userSchema);
