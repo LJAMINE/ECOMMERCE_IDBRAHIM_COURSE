@@ -1,9 +1,7 @@
 const Product = require("../models/product");
 const fs = require("fs");
 const formidable = require("formidable");
-const { console } = require("inspector");
 const Joi = require("joi");
-const product = require("../models/product");
 
 exports.createProduct = async (req, res) => {
   try {
@@ -126,10 +124,32 @@ exports.showProduct = (req, res) => {
     });
   }
 
-  // Create a copy without the photo
   const { photo, ...productWithoutPhoto } = req.product.toObject();
   
   res.json({
     product: productWithoutPhoto
   });
+};
+
+
+
+exports.removeProduct = async (req, res) => {
+    try {
+        const product = req.product;
+        
+         await Product.findByIdAndDelete(product._id);
+        
+        res.status(204).json({
+            message: "Product deleted successfully",
+            deletedProduct: {
+                _id: product._id,
+                name: product.name
+            }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            error: "Product not deleted",
+            details: error.message
+        });
+    }
 };
