@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 // import routes 
 const authRoutes=require("./routes/auth")
 const usersRoutes=require("./routes/users")
+const categoryRoutes=require("./routes/categories")
 // config app
 const app = express();
 require("dotenv").config();
@@ -27,6 +28,7 @@ mongoose
 //   routes middleware 
 app.use('/api', authRoutes);
 app.use('/api', usersRoutes);
+app.use('/api/category', categoryRoutes);
 
 
 

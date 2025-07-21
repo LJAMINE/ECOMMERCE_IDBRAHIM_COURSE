@@ -12,24 +12,23 @@ exports.requireSignin = jwt({
 
 
 
-exports.isAuth=(req,res,next)=>{
-  let user=req.profile && req.auth && (req.profile._id == req.auth._id);
+exports.isAuth = (req, res, next) => {
 
-  if(!user){
+  let user = req.profile && req.auth && (req.profile._id.toString() === req.auth._id);
+  
+  if (!user) {
     return res.status(403).json({
-      erro:"Access denied"
-    })
-    
+      error: "Access denied"
+    });
   }
   next();
-}
+};
 
-
-exports.isAdmin=(req, res, next) => {
-  if(req.auth.role==0){
+exports.isAdmin = (req, res, next) => {
+  if (req.auth.role !== 1) {
     return res.status(403).json({
       error: "Admin resource! Access denied"
-    })
+    });
   }
   next();
-}
+};
