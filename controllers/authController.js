@@ -41,7 +41,10 @@ exports.signin = async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { _id: user._id, role: user.role },
+      process.env.JWT_SECRET
+    );
 
     // Set cookie with proper expiration
     res.cookie("token", token, { expires: new Date(Date.now() + 999999) });
@@ -67,11 +70,10 @@ exports.signin = async (req, res) => {
   }
 };
 
-   
 // clear cookies and sign out user
 exports.signout = (req, res) => {
   res.clearCookie("token");
   res.json({
     message: "User signed out successfully",
   });
-}
+};
