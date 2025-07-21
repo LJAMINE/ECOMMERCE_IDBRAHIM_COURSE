@@ -3,6 +3,7 @@ const fs = require("fs");
 const formidable = require("formidable");
 const { console } = require("inspector");
 const Joi = require("joi");
+const product = require("../models/product");
 
 exports.createProduct = async (req, res) => {
   try {
@@ -50,21 +51,21 @@ exports.createProduct = async (req, res) => {
         }
 
         const schema = Joi.object({
-            name:Joi.string().required().max(150),
-            description:Joi.string().required().max(2000),
-            // price:Joi.number().required(),
-            // quantity:Joi.number().required(),
-            // category:Joi.string().required(),
-            // shipping:Joi.boolean().optional(),
+          name: Joi.string().required().max(150),
+          description: Joi.string().required().max(2000),
+          price:Joi.number().required(),
+          quantity:Joi.number().required(),
+          category:Joi.string().required(),
+          shipping:Joi.boolean().optional(),
         });
 
         const { error } = schema.validate(productData);
 
-    if(error) {
-        return res.status(400).json({
+        if (error) {
+          return res.status(400).json({
             error: error.details[0].message,
-        })
-    }
+          });
+        }
 
         // Save product using async/await
         const savedProduct = await product.save();
@@ -86,4 +87,49 @@ exports.createProduct = async (req, res) => {
       details: error.message,
     });
   }
+};
+
+
+// ...existing code...
+
+exports.productById = async (req, res, next, id) => {
+  console.log("productById called with ID:", id); // Add this debug line
+  
+  try {
+    const product = await Product.findById(id);
+    console.log("Product found:", product ? "Yes" : "No"); // Add this debug line
+    
+    if (!product) {
+      return res.status(400).json({
+        error: "Product not found",
+      });
+    }
+    
+    req.product = product;
+    console.log("req.product set successfully"); // Add this debug line
+    next();
+  } catch (error) {
+    console.log("Error in productById:", error.message); // Add this debug line
+    return res.status(400).json({
+      error: "Product not found",
+      details: error.message
+    });
+  }
+};
+
+exports.showProduct = (req, res) => {
+  console.log("showProduct called, req.product exists:", !!req.product); // Add this debug line
+  
+  if (!req.product) {
+    return res.status(404).json({
+      error: "Product not found"
+    });
+  }
+
+  // Create a copy without the photo
+  const { photo, ...productWithoutPhoto } = req.product.toObject();
+  
+  res.json({
+    product: productWithoutPhoto
+  });
 };
