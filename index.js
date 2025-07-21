@@ -2,10 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
-// import routes 
-const authRoutes=require("./routes/auth")
-const usersRoutes=require("./routes/users")
-const categoryRoutes=require("./routes/categories")
+// import routes
+const authRoutes = require("./routes/auth");
+const usersRoutes = require("./routes/users");
+const categoryRoutes = require("./routes/categories");
+const productRoutes = require("./routes/products");
 // config app
 const app = express();
 require("dotenv").config();
@@ -25,14 +26,11 @@ mongoose
     console.error("Database connection error:", err);
   });
 
-//   routes middleware 
-app.use('/api', authRoutes);
-app.use('/api', usersRoutes);
-app.use('/api/category', categoryRoutes);
-
-
-
-
+//   routes middleware
+app.use("/api", authRoutes);
+app.use("/api", usersRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
 
 const port = (process.env.PORT ||= 3000);
 app.listen(port, () => {

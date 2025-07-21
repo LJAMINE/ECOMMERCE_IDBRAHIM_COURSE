@@ -5,24 +5,23 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      maxHeight: 150,
+      maxlength: 150,
       trim: true,
     },
     description: {
       type: String,
       required: true,
-      maxHeight: 2000,
+      maxlength: 2000,
     },
     price: {
       type: Number,
       required: true,
-      trim: true,
-    },
-    quentity: {
+     },
+    quantity: {
       type: Number,
     },
     photo: {
-      type: Buffer,
+      data: Buffer,
       contentType: String,
     },
     category: {
@@ -36,7 +35,7 @@ const productSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Product", productSchema);
