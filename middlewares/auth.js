@@ -6,3 +6,20 @@ exports.requireSignin = jwt({
   algorithms: ["HS256"],
   requestProperty: "auth",
 });
+
+
+
+
+
+
+exports.isAuth=(req,res,next)=>{
+  let user=req.profile && req.auth && (req.profile._id == req.auth._id);
+
+  if(!user){
+    return res.status(403).json({
+      erro:"Access denied"
+    })
+    
+  }
+  next();
+}
