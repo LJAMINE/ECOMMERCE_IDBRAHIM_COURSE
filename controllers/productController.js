@@ -236,6 +236,7 @@ exports.updateProduct = async (req, res) => {
       }
     });
   } catch (error) {
+    
     return res.status(500).json({
       error: "Server error",
       details: error.message,
