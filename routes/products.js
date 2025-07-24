@@ -4,6 +4,7 @@ const { userById } = require("../middlewares/user");
 const router = express.Router();
 
 const {
+  allProducts,
   createProduct,
   showProduct,
   productById,
@@ -12,6 +13,8 @@ const {
 } = require("../controllers/productController");
 
 const { requireSignin, isAuth, isAdmin } = require("../middlewares/auth");
+
+router.get("/", allProducts);
 
 router.get("/:productId", showProduct);
 

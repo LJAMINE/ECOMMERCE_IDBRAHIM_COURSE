@@ -1,19 +1,43 @@
 const express = require("express");
-const {userById} = require("../middlewares/user");
+const { userById } = require("../middlewares/user");
 
 const router = express.Router();
 
-const { createCategory,showCategory,categoryById } = require("../controllers/categoryController");
+const {
+  allCategories,
+  createCategory,
+  showCategory,
+  categoryById,
+  updateCategory,
+  removeCategory,
+} = require("../controllers/categoryController");
 
 const { requireSignin, isAuth, isAdmin } = require("../middlewares/auth");
 
-router.post("/create/:userId", [requireSignin, isAuth, isAdmin], createCategory);
+router.get("/", allCategories);
 
-router.get('/:categoryId',showCategory);
+router.post(
+  "/create/:userId",
+  [requireSignin, isAuth, isAdmin],
+  createCategory
+);
 
-router.param('userId',userById);
+router.put(
+  "/:categoryId/:userId",
+  [requireSignin, isAuth, isAdmin],
+  updateCategory
+);
 
-router.param('categoryId', categoryById);
+router.delete(
+  "/:categoryId/:userId",
+  [requireSignin, isAuth, isAdmin],
+  removeCategory
+);
 
- 
+router.get("/:categoryId", showCategory);
+
+router.param("userId", userById);
+
+router.param("categoryId", categoryById);
+
 module.exports = router;

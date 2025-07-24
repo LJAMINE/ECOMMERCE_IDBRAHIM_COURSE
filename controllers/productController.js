@@ -192,8 +192,10 @@ exports.updateProduct = async (req, res) => {
 
         // Handle photo upload if exists
         if (files.photo) {
-          const photoFile = Array.isArray(files.photo) ? files.photo[0] : files.photo;
-          
+          const photoFile = Array.isArray(files.photo)
+            ? files.photo[0]
+            : files.photo;
+
           if (photoFile.size > Math.pow(10, 6)) {
             return res.status(400).json({
               error: "Image size should be less than 1MB",
@@ -236,9 +238,29 @@ exports.updateProduct = async (req, res) => {
       }
     });
   } catch (error) {
-    
     return res.status(500).json({
       error: "Server error",
+      details: error.message,
+    });
+  }
+};
+
+exports.allProducts = async (req, res) => {
+  try {
+    let sortBy = req.query.sortBy || "_id";
+    let order = req.query.order || "asc";
+    let limit = req.query.limit || 6;
+
+    const products = await Product.find()
+      .select("-photo")
+      .populate("category")
+      .sort([[sortBy, order]])
+      .limit(Number(limit));
+
+    res.json(products);
+  } catch (error) {
+    return res.status(400).json({
+      error: "Products not found",
       details: error.message,
     });
   }
